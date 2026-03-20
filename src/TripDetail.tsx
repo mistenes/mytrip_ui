@@ -10,7 +10,7 @@ import {
 import Itinerary from './Itinerary';
 import Finance from './Finance';
 
-export default function TripDetail({ onLogout, isDarkMode, setIsDarkMode, onBack }: { onLogout: () => void, isDarkMode: boolean, setIsDarkMode: (val: boolean) => void, onBack: () => void }) {
+export default function TripDetail({ onLogout, isDarkMode, setIsDarkMode, onBack, onNavigate }: { onLogout: () => void, isDarkMode: boolean, setIsDarkMode: (val: boolean) => void, onBack: () => void, onNavigate?: (page: string) => void }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState<'overview' | 'itinerary' | 'finance'>('overview');
 
@@ -34,11 +34,11 @@ export default function TripDetail({ onLogout, isDarkMode, setIsDarkMode, onBack
   ];
 
   if (activeView === 'itinerary') {
-    return <Itinerary onLogout={onLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setActiveView('overview')} />;
+    return <Itinerary onLogout={onLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setActiveView('overview')} onNavigate={onNavigate} />;
   }
   
   if (activeView === 'finance') {
-    return <Finance onLogout={onLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setActiveView('overview')} />;
+    return <Finance onLogout={onLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setActiveView('overview')} onNavigate={onNavigate} />;
   }
 
   return (
@@ -74,7 +74,6 @@ export default function TripDetail({ onLogout, isDarkMode, setIsDarkMode, onBack
           {/* Logo */}
           <div className="p-6 flex items-center justify-between cursor-pointer" onClick={onBack}>
             <div>
-              <span className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-brand-400/50 dark:text-brand-200/40">Travel Ops</span>
               <h2 className="font-display text-2xl font-bold text-brand-500 dark:text-brand-100 tracking-tight mt-0.5">myTrip.</h2>
             </div>
             <button className="lg:hidden p-2 -mr-2 text-brand-400/60 hover:text-brand-500 dark:text-brand-200/50 dark:hover:text-brand-100 rounded-full hover:bg-brand-100/50 dark:hover:bg-zinc-800 transition-colors" onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(false); }}>
@@ -116,14 +115,18 @@ export default function TripDetail({ onLogout, isDarkMode, setIsDarkMode, onBack
               <span className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-brand-400/40 dark:text-brand-200/30">Workspace</span>
             </div>
             {navItems.slice(1).map((item, idx) => (
-              <a 
+              <button 
                 key={idx} 
-                href="#" 
-                className="flex items-center gap-3 px-4 py-2.5 rounded-[14px] font-semibold text-sm text-brand-400/70 dark:text-brand-200/60 hover:bg-brand-100/50 dark:hover:bg-zinc-800/50 hover:text-brand-500 dark:hover:text-brand-100 transition-all"
+                onClick={() => {
+                  if (item.label === 'Files' && onNavigate) onNavigate('files');
+                  if (item.label === 'Trips' && onNavigate) onNavigate('dashboard');
+                  if (item.label === 'People' && onNavigate) onNavigate('people');
+                }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-[14px] font-semibold text-sm text-brand-400/70 dark:text-brand-200/60 hover:bg-brand-100/50 dark:hover:bg-zinc-800/50 hover:text-brand-500 dark:hover:text-brand-100 transition-all"
               >
                 <item.icon size={18} className="opacity-70" />
                 {item.label}
-              </a>
+              </button>
             ))}
           </nav>
 

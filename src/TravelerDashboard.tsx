@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Sun, Moon, LogOut, Menu, X, 
+  Sun, Moon, LogOut, Menu, X, Bell,
   Map, FileText, MessageSquare, UserCircle, ChevronRight,
   Plane, Calendar, CreditCard, Compass
 } from 'lucide-react';
@@ -55,7 +55,6 @@ export default function TravelerDashboard({ onLogout, isDarkMode, setIsDarkMode 
           {/* Logo */}
           <div className="p-6 flex items-center justify-between">
             <div>
-              <span className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-brand-400/50 dark:text-brand-200/40">Traveler Portal</span>
               <h2 className="font-display text-2xl font-bold text-brand-500 dark:text-brand-100 tracking-tight mt-0.5">myTrip.</h2>
             </div>
             <button className="lg:hidden p-2 -mr-2 text-brand-400/60 hover:text-brand-500 dark:text-brand-200/50 dark:hover:text-brand-100 rounded-full hover:bg-brand-100/50 dark:hover:bg-zinc-800 transition-colors" onClick={() => setIsSidebarOpen(false)}>
@@ -65,13 +64,16 @@ export default function TravelerDashboard({ onLogout, isDarkMode, setIsDarkMode 
 
           {/* Nav */}
           <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto hide-scrollbar">
+            <div className="pt-2 pb-2 px-4">
+              <span className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-brand-400/40 dark:text-brand-200/30">Workspace</span>
+            </div>
             {navItems.map((item, idx) => (
               <a 
                 key={idx} 
                 href="#" 
-                className={`flex items-center gap-3 px-4 py-3 rounded-[16px] font-semibold text-sm transition-all ${
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-[14px] font-semibold text-sm transition-all ${
                   item.active 
-                    ? 'bg-brand-500 dark:bg-brand-400 text-white shadow-md shadow-brand-500/20' 
+                    ? 'bg-white dark:bg-zinc-800 text-brand-500 dark:text-brand-100 shadow-sm' 
                     : 'text-brand-400/70 dark:text-brand-200/60 hover:bg-brand-100/50 dark:hover:bg-zinc-800/50 hover:text-brand-500 dark:hover:text-brand-100'
                 }`}
               >
@@ -118,6 +120,11 @@ export default function TravelerDashboard({ onLogout, isDarkMode, setIsDarkMode 
           </div>
 
           <div className="flex items-center gap-3 sm:gap-4 ml-auto">
+            <button className="p-2.5 bg-white/60 dark:bg-[#121212]/60 backdrop-blur-md border border-brand-100/60 dark:border-zinc-800/50 text-brand-500 dark:text-brand-200 rounded-[14px] shadow-sm hover:bg-white dark:hover:bg-[#121212] transition-colors relative">
+              <Bell size={20} />
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-[#121212]"></span>
+            </button>
+
             <div className="h-10 w-10 rounded-[14px] bg-gradient-to-br from-emerald-300 to-emerald-500 flex items-center justify-center text-white font-bold text-sm shadow-sm cursor-pointer hover:shadow-md transition-shadow">
               A
             </div>

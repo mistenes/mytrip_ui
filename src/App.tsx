@@ -3,13 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Moon, Sun, ArrowRight, UserCircle, ShieldCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 import Dashboard from './Dashboard';
 import TravelerDashboard from './TravelerDashboard';
 import TravelerTripDetail from './TravelerTripDetail';
 import TravelerFinance from './TravelerFinance';
+import Files from './Files';
+import People from './People';
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -17,6 +19,7 @@ export default function App() {
   const [password, setPassword] = useState('demo123');
   const [role, setRole] = useState<'organizer' | 'traveler' | null>(null);
   const [selectedTrip, setSelectedTrip] = useState<string | null>(null);
+  const [activePage, setActivePage] = useState<'dashboard' | 'files' | 'people'>('dashboard');
 
   useEffect(() => {
     // Check system preference on initial load
@@ -47,20 +50,31 @@ export default function App() {
   const handleLogout = () => {
     setRole(null);
     setSelectedTrip(null);
+    setActivePage('dashboard');
+  };
+
+  const handleNavigate = (page: string) => {
+    if (page === 'files') {
+      setActivePage('files');
+    } else if (page === 'dashboard') {
+      setActivePage('dashboard');
+    } else if (page === 'people') {
+      setActivePage('people');
+    }
   };
 
   if (role === 'organizer') {
-    return <Dashboard onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />;
+    if (activePage === 'files') {
+      return <Files onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setActivePage('dashboard')} onNavigate={handleNavigate} />;
+    }
+    if (activePage === 'people') {
+      return <People onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setActivePage('dashboard')} onNavigate={handleNavigate} />;
+    }
+    return <Dashboard onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onNavigate={handleNavigate} />;
   }
 
   if (role === 'traveler') {
-    if (selectedTrip === 'latin-turnebusz') {
-      return <TravelerTripDetail onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setSelectedTrip(null)} />;
-    }
-    if (selectedTrip === 'latin-turnebusz-finance') {
-      return <TravelerFinance onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onBack={() => setSelectedTrip(null)} />;
-    }
-    return <TravelerDashboard onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} setSelectedTrip={setSelectedTrip} />;
+    return <TravelerDashboard onLogout={handleLogout} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />;
   }
 
   return (
